@@ -1,0 +1,26 @@
+server:
+  port: 8091
+
+eureka:
+  #eueka 主机名
+  instance:
+    hostname: localhost
+  client:
+    #提供者和消费者的注册地址
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
+spring:
+  application:
+    name: demo-provider
+
+spring.datasource:
+  name: develop
+  url: jdbc:mysql://127.0.0.1:3306/shares?useUnicode=true&characterEncoding=utf8&autoReconnect=true
+  username: root
+  password: root
+  driver-class-name: com.mysql.jdbc.Driver
+  tomcat:
+    max-active: 1200
+    max-wait: 1000
+    initial-wait : 500

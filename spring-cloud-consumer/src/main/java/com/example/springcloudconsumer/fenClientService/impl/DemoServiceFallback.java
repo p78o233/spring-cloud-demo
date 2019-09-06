@@ -1,0 +1,16 @@
+package com.example.springcloudconsumer.fenClientService.impl;/*
+ * @author p78o2
+ * @date 2019/9/5
+ */
+
+import com.example.springcloudconsumer.fenClientService.DemoFeignService;
+import org.springframework.stereotype.Component;
+
+@Component
+public class DemoServiceFallback implements DemoFeignService {
+
+    @Override
+    public String getTest(String testName) {
+        return "error";
+    }
+}
