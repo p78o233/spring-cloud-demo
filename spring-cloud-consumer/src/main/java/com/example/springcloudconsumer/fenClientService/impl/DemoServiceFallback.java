@@ -5,7 +5,7 @@ package com.example.springcloudconsumer.fenClientService.impl;/*
 
 import com.example.springcloudconsumer.fenClientService.DemoFeignService;
 import org.springframework.stereotype.Component;
-
+//断路器的实现
 @Component
 public class DemoServiceFallback implements DemoFeignService {
 

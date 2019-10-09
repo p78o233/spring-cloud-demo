@@ -1,0 +1,28 @@
+server:
+  #服务端口号
+  port: 8085
+spring:
+  application:
+    #服务名称 - 服务之间使用名称进行通讯
+    name: service-zuul
+eureka:
+  #eueka 主机名
+  instance:
+    hostname: localhost
+  client:
+    #提供者和消费者的注册地址
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+zuul:
+  routes:
+    #设置服务a 路径名称 随便起
+    demo-customer:
+#      这里写的是通过网关访问的路径名
+      path: /test/**
+      #这里写a服务的注册名字，就是映射的项目的spring.application.name
+      serviceId: demo-customer
+#    #设置服务b 路径名称 随便起
+#    service-b:
+#      path: /service-b/**
+#      #这里写b服务的注册名字
+#      serviceId: service-objcat-b

@@ -6,11 +6,10 @@ spring:
     name: demo-customer
 
 eureka:
-  #eueka 主机名
+
   instance:
     hostname: localhost
   client:
-    #提供者和消费者的注册地址
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
 feign:
