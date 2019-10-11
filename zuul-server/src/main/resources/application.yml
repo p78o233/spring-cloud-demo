@@ -1,28 +1,29 @@
 server:
-  #·şÎñ¶Ë¿ÚºÅ
+#  ç«¯å£å·
   port: 8085
 spring:
   application:
-    #·şÎñÃû³Æ - ·şÎñÖ®¼äÊ¹ÓÃÃû³Æ½øĞĞÍ¨Ñ¶
+#   åº”ç”¨å
     name: service-zuul
 eureka:
-  #eueka Ö÷»úÃû
+  #eueka åœ°å€
   instance:
     hostname: localhost
   client:
-    #Ìá¹©ÕßºÍÏû·ÑÕßµÄ×¢²áµØÖ·
+#    æ³¨å†Œåœ°å€
     service-url:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
 zuul:
   routes:
-    #ÉèÖÃ·şÎña Â·¾¶Ãû³Æ Ëæ±ãÆğ
+    #ç½‘å…³åå­—éšä¾¿èµ·
     demo-customer:
-#      ÕâÀïĞ´µÄÊÇÍ¨¹ıÍø¹Ø·ÃÎÊµÄÂ·¾¶Ãû
+#      ç½‘å…³url ç«¯å£åé¢çš„éƒ¨åˆ†
       path: /test/**
-      #ÕâÀïĞ´a·şÎñµÄ×¢²áÃû×Ö£¬¾ÍÊÇÓ³ÉäµÄÏîÄ¿µÄspring.application.name
+      #æ˜ å°„çš„é¡¹ç›®çš„spring.application.name
       serviceId: demo-customer
-#    #ÉèÖÃ·şÎñb Â·¾¶Ãû³Æ Ëæ±ãÆğ
-#    service-b:
-#      path: /service-b/**
-#      #ÕâÀïĞ´b·şÎñµÄ×¢²áÃû×Ö
-#      serviceId: service-objcat-b
+#    #æœ‰å¤šä¸ªæ˜ å°„é¡¹ç›®å°±é‡å¤æ“ä½œ
+#    demo-customerb:
+      ##      ç½‘å…³url ç«¯å£åé¢çš„éƒ¨åˆ†
+      #      path: /test/**
+      #      #æ˜ å°„çš„é¡¹ç›®çš„spring.application.name
+      #      serviceId: demo-customer
