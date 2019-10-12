@@ -9,6 +9,10 @@ eureka:
   #eueka 地址
   instance:
     hostname: localhost
+    #    每秒发一个心跳包
+    lease-renewal-interval-in-seconds: 1
+    #    告诉服务器2秒没有心跳，注销
+    lease-expiration-duration-in-seconds: 2
   client:
 #    注册地址
     service-url:

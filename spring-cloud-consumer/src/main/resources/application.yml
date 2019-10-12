@@ -9,6 +9,10 @@ eureka:
 
   instance:
     hostname: localhost
+#    每秒发一个心跳包
+    lease-renewal-interval-in-seconds: 1
+#    告诉服务器2秒没有心跳，注销
+    lease-expiration-duration-in-seconds: 2
   client:
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
