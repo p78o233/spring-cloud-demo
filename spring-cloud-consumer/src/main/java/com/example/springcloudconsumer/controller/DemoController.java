@@ -17,6 +17,7 @@ public class DemoController {
 
     @RequestMapping("/test")
     public String test() {
+        System.out.println("端口8202");
         return testService.getTest("test");
     }
 

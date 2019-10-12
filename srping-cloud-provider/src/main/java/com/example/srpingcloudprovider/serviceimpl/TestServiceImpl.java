@@ -12,4 +12,9 @@ public class TestServiceImpl implements TestService {
     public String getTest(String testName) {
         return testName+":233";
     }
+
+    @Override
+    public String getTestRibbon() {
+        return "ABC";
+    }
 }

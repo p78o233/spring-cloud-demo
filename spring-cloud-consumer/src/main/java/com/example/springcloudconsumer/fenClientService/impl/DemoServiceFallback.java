@@ -13,4 +13,9 @@ public class DemoServiceFallback implements DemoFeignService {
     public String getTest(String testName) {
         return "error";
     }
+
+    @Override
+    public String getTestRibbon() {
+        return null;
+    }
 }
