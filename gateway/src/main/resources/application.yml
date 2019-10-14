@@ -3,31 +3,48 @@ server:
     context-path: /
   port: 8900
 spring:
+  main:
+    allow-bean-definition-overriding: true #å½“é‡åˆ°åŒæ ·åå­—çš„æ—¶å€™ï¼Œæ˜¯å¦å…è®¸è¦†ç›–æ³¨å†Œ
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    password: 123456
   application:
     name: client-gateway
   cloud:
     gateway:
       discovery:
         locator:
-          enabled: false #±íÃ÷gateway¿ªÆô·şÎñ×¢²áºÍ·¢ÏÖµÄ¹¦ÄÜ£¬²¢ÇÒspring cloud gateway×Ô¶¯¸ù¾İ·şÎñ·¢ÏÖÎªÃ¿Ò»¸ö·şÎñ´´½¨ÁËÒ»¸örouter£¬# Õâ¸örouter½«ÒÔ·şÎñÃû¿ªÍ·µÄÇëÇóÂ·¾¶×ª·¢µ½¶ÔÓ¦µÄ·şÎñ
-          lower-case-service-id: true #½«ÇëÇóÂ·¾¶ÉÏµÄ·şÎñÃûÅäÖÃÎªĞ¡Ğ´£¨ÒòÎª·şÎñ×¢²áµÄÊ±ºò£¬Ïò×¢²áÖĞĞÄ×¢²áÊ±½«·şÎñÃû×ª³É´óĞ´µÄÁË,±ÈÈçÒÔ/service-hi/*µÄÇëÇóÂ·¾¶±»Â·ÓÉ×ª·¢µ½·şÎñÃûÎªservice-hiµÄ·şÎñÉÏ
+          enabled: false #è¡¨æ˜gatewayå¼€å¯æœåŠ¡æ³¨å†Œå’Œå‘ç°çš„åŠŸèƒ½ï¼Œå¹¶ä¸”spring cloud gatewayè‡ªåŠ¨æ ¹æ®æœåŠ¡å‘ç°ä¸ºæ¯ä¸€ä¸ªæœåŠ¡åˆ›å»ºäº†ä¸€ä¸ªrouterï¼Œ# è¿™ä¸ªrouterå°†ä»¥æœåŠ¡åå¼€å¤´çš„è¯·æ±‚è·¯å¾„è½¬å‘åˆ°å¯¹åº”çš„æœåŠ¡
+          lower-case-service-id: true #å°†è¯·æ±‚è·¯å¾„ä¸Šçš„æœåŠ¡åé…ç½®ä¸ºå°å†™ï¼ˆå› ä¸ºæœåŠ¡æ³¨å†Œçš„æ—¶å€™ï¼Œå‘æ³¨å†Œä¸­å¿ƒæ³¨å†Œæ—¶å°†æœåŠ¡åè½¬æˆå¤§å†™çš„äº†,æ¯”å¦‚ä»¥/service-hi/*çš„è¯·æ±‚è·¯å¾„è¢«è·¯ç”±è½¬å‘åˆ°æœåŠ¡åä¸ºservice-hiçš„æœåŠ¡ä¸Š
       routes:
-        - id: host_route
-            # lb´ú±í·şÎñÃû£¬ºóÃæ´ÓribbonµÄ·şÎñÁĞ±íÖĞ»ñÈ¡£¨ÆäÊµÎ¢·şÎñÊÇ´Ó×¢²áÖĞĞÄÖĞ»ñÈ¡µÄ£©
-            # ÕâÀï¸ºÔØËùÓĞµÄhttpÇëÇó
-#          ÕâÀïĞ´µÄÊÇapplication-name
-          uri: lb://demo-customer
-          predicates:
-            - Path=/**
+      - id: fsh-house
+        uri: lb://demo-customer
+        predicates:
+          - Path=/**
+        filters:
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter.replenishRate: 1
+            redis-rate-limiter.burstCapacity: 1
+            key-resolver: "#{@ipKeyResolver}"
+      - id: host_route
+            # lbä»£è¡¨æœåŠ¡åï¼Œåé¢ä»ribbonçš„æœåŠ¡åˆ—è¡¨ä¸­è·å–ï¼ˆå…¶å®å¾®æœåŠ¡æ˜¯ä»æ³¨å†Œä¸­å¿ƒä¸­è·å–çš„ï¼‰
+          # è¿™é‡Œè´Ÿè½½æ‰€æœ‰çš„httpè¯·æ±‚
+          #          è¿™é‡Œå†™çš„æ˜¯application-name
+        uri: lb://demo-customer
+        predicates:
+          - Path=/**
 xx-http:
   ribbon:
-    # ·şÎñÁĞ±í
+    # æœåŠ¡åˆ—è¡¨
     listOfServers: http://127.0.0.1:8201, http://127.0.0.1:8202
     # 10s
     ConnectTimeout: 10000
     # 10min
     ReadTimeout: 600000
-    # ×î´óµÄÁ¬½Ó
+    # æœ€å¤§çš„è¿æ¥
     MaxTotalHttpConnections: 500
-    # Ã¿¸öÊµÀıµÄ×î´óÁ¬½Ó
+    # æ¯ä¸ªå®ä¾‹çš„æœ€å¤§è¿æ¥
     MaxConnectionsPerHost: 300

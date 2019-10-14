@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class DemoController {
     @Autowired
     private DemoFeignService testService;
-
+    private static int i = 0;
     @RequestMapping("/test")
     public String test() {
-        System.out.println("端口8202");
+        System.out.println(i++);
         return testService.getTest("test");
     }
 
