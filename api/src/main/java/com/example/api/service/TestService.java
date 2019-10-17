@@ -12,4 +12,6 @@ public interface TestService {
     public String getTest(@RequestParam("testName")String testName);
     @RequestMapping(value = "/testRibbon",method = RequestMethod.GET)
     public String getTestRibbon();
+    @RequestMapping(value = "/overTime",method = RequestMethod.GET)
+    public String getOverTime();
 }

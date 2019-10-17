@@ -17,4 +17,9 @@ public class TestServiceImpl implements TestService {
     public String getTestRibbon() {
         return "ABC";
     }
+
+    @Override
+    public String getOverTime() {
+        return null;
+    }
 }

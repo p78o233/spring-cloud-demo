@@ -18,4 +18,9 @@ public class DemoServiceFallback implements DemoFeignService {
     public String getTestRibbon() {
         return null;
     }
+
+    @Override
+    public String getOverTime() {
+        return null;
+    }
 }

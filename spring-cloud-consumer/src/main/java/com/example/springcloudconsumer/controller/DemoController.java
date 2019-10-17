@@ -6,6 +6,7 @@ package com.example.springcloudconsumer.controller;/*
 import com.example.api.service.TestService;
 import com.example.springcloudconsumer.fenClientService.DemoFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +20,15 @@ public class DemoController {
     public String test() throws InterruptedException{
         System.out.println(i++);
         return testService.getTest("test");
+    }
+    @GetMapping ("/overTime")
+    public Object test3() {
+        try {
+            Thread.sleep(5500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "dbToEs";
     }
 
 }
