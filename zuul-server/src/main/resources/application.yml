@@ -2,6 +2,11 @@ server:
 #  端口号
   port: 8085
 spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    password: 123456
   application:
 #   应用名
     name: service-zuul
@@ -34,10 +39,11 @@ zuul:
   host:
     connect-timeout-millis: 15000 #HTTP连接超时大于Hystrix的超时时间
     socket-timeout-millis: 60000   #socket超时
+
 ribbon:        #设置ribbon的超时时间小于zuul的超时时间
   ReadTimeout: 10000
   ConnectTimeout: 10000
 #负载均衡配置
 spring-boot-user:
   ribbon:
-    listOfServices: http://127.0.0.1:8202,http://127.0.0.1:8201
+    listOfServices: http://127.0.0.1:8202

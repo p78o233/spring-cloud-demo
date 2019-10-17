@@ -14,33 +14,54 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 public class PreFilter extends ZuulFilter {
+    /**
+     * 过滤器的类型，它决定过滤器在请求的哪个生命周期中执行。
+     * 这里定义为pre，代表会在请求被路由之前执行。
+     *
+     * @return
+     */
     @Override
     public String filterType() {
         return "pre";
     }
 
+    /**
+     * filter执行顺序，通过数字指定。
+     * 数字越大，优先级越低。
+     *
+     * @return
+     */
     @Override
     public int filterOrder() {
         return 0;
     }
 
+    /**
+     * 判断该过滤器是否需要被执行。这里我们直接返回了true，因此该过滤器对所有请求都会生效。
+     * 实际运用中我们可以利用该函数来指定过滤器的有效范围。
+     *
+     * @return
+     */
     @Override
     public boolean shouldFilter() {
         return false;
     }
 
+    /**
+     * 过滤器的具体逻辑
+     *
+     * @return
+     */
     @Override
-    public Object run() throws ZuulException {
-//        拦截器具体实现方式
-        RequestContext requestContext = RequestContext.getCurrentContext();
-        HttpServletRequest request = requestContext.getRequest();
-        HttpServletResponse response = requestContext.getResponse();
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Headers", "Authorization,X-Requested-With");
-        String requestURI = request.getRequestURI();
-//        这个是不拦截该接口
-        if ("/test/**".equalsIgnoreCase(request.getRequestURI())){
-            return true;
+    public Object run() {
+        RequestContext ctx = RequestContext.getCurrentContext();
+        HttpServletRequest request = ctx.getRequest();
+
+        String token = request.getParameter("token");
+        if (token == null || token.isEmpty()) {
+            ctx.setSendZuulResponse(false);
+            ctx.setResponseStatusCode(401);
+            ctx.setResponseBody("token is empty");
         }
         return null;
     }
