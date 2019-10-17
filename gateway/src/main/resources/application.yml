@@ -2,6 +2,7 @@ server:
   servlet:
     context-path: /
   port: 8900
+hystrix.command.fallbackcmd.execution.isolation.thread.timeoutInMilliseconds: 200
 spring:
   main:
     allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
@@ -14,32 +15,39 @@ spring:
     name: client-gateway
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: false #表明gateway开启服务注册和发现的功能，并且spring cloud gateway自动根据服务发现为每一个服务创建了一个router，# 这个router将以服务名开头的请求路径转发到对应的服务
-          lower-case-service-id: true #将请求路径上的服务名配置为小写（因为服务注册的时候，向注册中心注册时将服务名转成大写的了,比如以/service-hi/*的请求路径被路由转发到服务名为service-hi的服务上
+#      discovery:
+#        locator:
+#          enabled: false #表明gateway开启服务注册和发现的功能，并且spring cloud gateway自动根据服务发现为每一个服务创建了一个router，# 这个router将以服务名开头的请求路径转发到对应的服务
+#          lower-case-service-id: true #将请求路径上的服务名配置为小写（因为服务注册的时候，向注册中心注册时将服务名转成大写的了,比如以/service-hi/*的请求路径被路由转发到服务名为service-hi的服务上
       routes:
-      - id: fsh-house
+      - id: fsh-house #限流配置
         uri: lb://demo-customer
         predicates:
           - Path=/**
         filters:
         - name: RequestRateLimiter
           args:
+#            令牌每秒的生产速率
             redis-rate-limiter.replenishRate: 1
+#            令牌池存放令牌的最大值
             redis-rate-limiter.burstCapacity: 1
+#            过滤器的函数名
             key-resolver: "#{@ipKeyResolver}"
-      - id: host_route
-            # lb代表服务名，后面从ribbon的服务列表中获取（其实微服务是从注册中心中获取的）
-          # 这里负载所有的http请求
-          #          这里写的是application-name
+      - id: host_route #分流配置
+#        lb代表服务名，后面从ribbon的服务列表中获取（其实微服务是从注册中心中获取的）这里负载所有的http请求,这里写的是application-name
         uri: lb://demo-customer
         predicates:
           - Path=/**
+        filters: #熔断但是貌似没用
+        - name: Hystrix
+          args:
+            name: fallbackcmd
+            fallbackUri: forward:/defaultfallback
+#分流配置
 xx-http:
   ribbon:
     # 服务列表
-    listOfServers: http://127.0.0.1:8201, http://127.0.0.1:8202
+    listOfServers: http://127.0.0.1:8202
     # 10s
     ConnectTimeout: 10000
     # 10min
@@ -48,3 +56,13 @@ xx-http:
     MaxTotalHttpConnections: 500
     # 每个实例的最大连接
     MaxConnectionsPerHost: 300
+eureka:
+  instance:
+    hostname: localhost
+    #    每秒发一个心跳包
+    lease-renewal-interval-in-seconds: 1
+    #    告诉服务器2秒没有心跳，注销
+    lease-expiration-duration-in-seconds: 2
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/

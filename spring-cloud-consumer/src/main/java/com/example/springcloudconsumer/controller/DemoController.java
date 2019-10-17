@@ -16,7 +16,7 @@ public class DemoController {
     private DemoFeignService testService;
     private static int i = 0;
     @RequestMapping("/test")
-    public String test() {
+    public String test() throws InterruptedException{
         System.out.println(i++);
         return testService.getTest("test");
     }
