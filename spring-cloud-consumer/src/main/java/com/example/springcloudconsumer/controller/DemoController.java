@@ -6,15 +6,21 @@ package com.example.springcloudconsumer.controller;/*
 import com.example.api.service.TestService;
 import com.example.springcloudconsumer.fenClientService.DemoFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.websocket.server.PathParam;
 
 @RestController
 @RequestMapping(value = "/cloud")
 public class DemoController {
     @Autowired
     private DemoFeignService testService;
+    @Autowired
+    private KafkaTemplate<String, String> template;
     private static int i = 0;
     @RequestMapping("/test")
     public String test() throws InterruptedException{
@@ -29,6 +35,10 @@ public class DemoController {
             e.printStackTrace();
         }
         return "dbToEs";
+    }
+    @GetMapping("/sendMsg/{msg}")
+    public void sendMsg(@PathVariable("msg")String msg){
+        this.template.send("test", msg);
     }
 
 }
