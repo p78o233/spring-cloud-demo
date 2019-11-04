@@ -27,7 +27,7 @@ public class TestServiceImpl implements TestService {
     public String getOverTime() {
         return null;
     }
-    @KafkaListener(topics = "test")
+//    @KafkaListener(topics = "test")
     public void listen(ConsumerRecord<String, String> cr) throws Exception {
         System.out.println("我是消费者:"+cr.toString());
         latch.countDown();

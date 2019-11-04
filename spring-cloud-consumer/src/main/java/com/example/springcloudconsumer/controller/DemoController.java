@@ -22,11 +22,13 @@ public class DemoController {
     @Autowired
     private KafkaTemplate<String, String> template;
     private static int i = 0;
+//    测试接口
     @RequestMapping("/test")
     public String test() throws InterruptedException{
         System.out.println(i++);
         return testService.getTest("test");
     }
+//    超时熔断接口
     @GetMapping ("/overTime")
     public Object test3() {
         try {
@@ -36,6 +38,7 @@ public class DemoController {
         }
         return "dbToEs";
     }
+//    kafka接口
     @GetMapping("/sendMsg/{msg}")
     public void sendMsg(@PathVariable("msg")String msg){
         this.template.send("test", msg);
