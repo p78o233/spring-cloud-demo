@@ -9,6 +9,7 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 
+import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +28,8 @@ public class RateLimitZuulFilter extends ZuulFilter {
     @Override
     public String filterType() {
         //设置为前置过滤器
-        return "pre";
+//        return "pre";
+        return FilterConstants.PRE_TYPE;
     }
 
     /**
@@ -37,7 +39,6 @@ public class RateLimitZuulFilter extends ZuulFilter {
      */
     @Override
     public int filterOrder() {
-        //最先执行的
         return -1;
     }
 
