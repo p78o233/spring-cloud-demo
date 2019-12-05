@@ -23,7 +23,7 @@ public class DemoController {
     private KafkaTemplate<String, String> template;
     private static int i = 0;
 //    测试接口
-    @RequestMapping("/test")
+    @GetMapping("/test")
     public String test() throws InterruptedException{
         System.out.println(i++);
         return testService.getTest("test");
